@@ -4,6 +4,10 @@ type Query{
     users: [User!]!
 }
 
+type Mutation {
+    register(user : UserInput!): User
+}
+
 "Informacion del usuario "
 type User {
     "Identificador Unico"
@@ -18,4 +22,28 @@ type User {
     password: String!
     registerDate: String!
     birthday: String!
+    "Permisos del usuario"
+    role: Role!
+}
+"Input importante para que el tipo de role sea por defecto CLIENT"
+input UserInput {
+    id:ID
+    "Nombre de Usuario"
+    name: String!
+    "Apellido del usuario"
+    lastname: String!
+    "Email del usuario"
+    email: String!
+    "Contraseña"
+    password: String!
+    "Fecha para comprobar que es mayor de 18 años"
+    birthday: String!
+    "Permisos del usuario"
+    role: Role=CLIENT
+
+}
+
+enum Role {
+    CLIENT
+    ADMIN
 }

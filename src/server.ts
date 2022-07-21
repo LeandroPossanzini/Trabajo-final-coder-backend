@@ -6,10 +6,10 @@ import enviroment from './config/enviroments';
 import { ApolloServer } from "apollo-server-express";
 import schema from "./schema";
 import expressPlayground from "graphql-playground-middleware-express"
+import Database from "./lib/database";
 
 if(process.env.NODE_ENV !== "production"){
     const env = enviroment;
-    console.log(env)
 }
 
 
@@ -22,9 +22,16 @@ async function init() {
 
     app.use(compression())
 
+    const database = new Database;
+
+    const db = await database.init()
+
+    const context = {db}
+
     const server = new ApolloServer({
         schema,
-        introspection: true
+        introspection: true,
+        context
     });
     
     await server.start()
