@@ -1,11 +1,49 @@
 
 "Definiciones de los tipos de raiz"
 type Query{
-    users: [User!]!
+    users: ResultUsers
+    "Para iniciar sesion de usuario"
+    login(email: String!, password: String!) : ResultLogin
+    "Autenticar mendiante token"
+    me: ResultUser
 }
 
 type Mutation {
-    register(user : UserInput!): User
+    register(user : UserInput!): ResultUser
+}
+
+"Iterface para especificar las propiedades obligatorias"
+interface Result {
+    "Estado de la operacion"
+    status: Boolean!
+    "Mensaje de la operacion para dar un feedback"
+    message: String!
+}
+
+type ResultUsers implements Result {
+    "Estado de la operacion"
+    status: Boolean!
+    "Mensaje de la operacion para dar un feedback"
+    message: String!
+    users: [User!]!
+}
+
+type ResultUser implements Result {
+    "Estado de la operacion"
+    status: Boolean!
+    "Mensaje de la operacion para dar un feedback"
+    message: String!
+    "Informacion del usuario"
+    user: User
+}
+
+type ResultLogin implements Result {
+    "Estado de la operacion"
+    status: Boolean!
+    "Mensaje de la operacion para dar un feedback"
+    message: String!
+    "Informacion del token del usuario logueado"
+    token: String
 }
 
 "Informacion del usuario "

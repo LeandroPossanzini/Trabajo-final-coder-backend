@@ -1,16 +1,84 @@
 import { IResolvers } from "@graphql-tools/utils";
-import { COLLECTIONS } from "../config/constantes";
+import { COLLECTIONS, EXPIRETIME, MESSAGES } from "../config/constantes";
+import JWT from "../lib/jwt";
+import bcrypt from "bcrypt"
+
 
 const resolversQuery: IResolvers = {
   Query: {
     async users(_, __, { db }) {
       try {
-        return await db.collection(COLLECTIONS.USERS).find().toArray();
+        return {
+          status: true,
+          message: "Lista de usuarios cargada ok",
+          users: await db.collection(COLLECTIONS.USERS).find().toArray(),
+        };
       } catch (e) {
         console.log(e);
-        return [];
+        return {
+          status: false,
+          message: "Error en la carga de usuarios",
+          users: [],
+        };
       }
     },
+
+    async login(_, { email, password }, { db }) {
+      try {
+        const user = await db
+          .collection(COLLECTIONS.USERS)
+          .findOne({ email });
+
+        if (user === null) {
+          return {
+            status: false,
+            message: "Usuario no existe",
+            token: null,
+          };
+        }
+        const passswordCheck = bcrypt.compareSync(password, user.password);
+
+        if(passswordCheck !== null){
+          delete user.password;
+          delete user.birthday;
+          delete user.regiterDate;
+        }
+
+        return {
+          status: true,
+          message:
+            !passswordCheck
+              ? "Password y usuario incorrecto, inicie sesion"
+              : "Usuario correcto",
+          token: 
+            !passswordCheck
+              ? null
+              : new JWT().sing({ user }, EXPIRETIME.H24)
+        };
+      } catch (e) {
+        console.log(e);
+        return {
+          status: false,
+          message: "Error al cargar el usuario",
+          token: null,
+        };
+      }
+    },
+    me(_,__, {token}) {
+      let info = new JWT().verify(token);
+      if(info === MESSAGES.TOKEN_VERIFICATION_FAILED){
+        return {
+          status:false,
+          message: info,
+          user: null
+        };
+      }
+      return {
+        status: true,
+        message: "Usuario verificado ok ",
+        user: Object.values(info)[0]
+      };
+    }
   },
 };
 

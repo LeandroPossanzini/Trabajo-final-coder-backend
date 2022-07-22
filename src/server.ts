@@ -7,6 +7,7 @@ import { ApolloServer } from "apollo-server-express";
 import schema from "./schema";
 import expressPlayground from "graphql-playground-middleware-express"
 import Database from "./lib/database";
+import { IContext } from './interfaces/context.interface';
 
 if(process.env.NODE_ENV !== "production"){
     const env = enviroment;
@@ -24,9 +25,12 @@ async function init() {
 
     const database = new Database;
 
-    const db = await database.init()
+    const db = await database.init();
 
-    const context = {db}
+    const context = async({req, connection}: IContext) => {
+        const token = (req) ? req.headers.authorization : connection.authorization;
+        return { db, token}
+    };
 
     const server = new ApolloServer({
         schema,
@@ -53,3 +57,7 @@ async function init() {
 };
 
 init()
+
+function async(arg0: { req: any; connection: any; }) {
+    throw new Error("Function not implemented.");
+}

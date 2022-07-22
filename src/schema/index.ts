@@ -7,7 +7,10 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 
 const schema: GraphQLSchema = makeExecutableSchema({
     typeDefs,
-    resolvers
+    resolvers,
+    // resolverValidationOptions: {
+    //     requireResolversForResolveType: false;
+    // }
 });
 
 export default schema;
