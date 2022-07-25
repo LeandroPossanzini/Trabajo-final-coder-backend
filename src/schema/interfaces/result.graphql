@@ -1,0 +1,7 @@
+"Iterface para especificar las propiedades obligatorias"
+interface Result {
+    "Estado de la operacion"
+    status: Boolean!
+    "Mensaje de la operacion para dar un feedback"
+    message: String!
+}

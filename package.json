@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/LeandroPossanzini/Trabajo-final-coder-backend#readme",
   "dependencies": {
+    "@graphql-tools/load-files": "^6.6.0",
+    "@graphql-tools/merge": "^8.3.0",
     "@types/bcrypt": "^5.0.0",
+    "@wiicamp/graphql-merge-resolvers": "^2.1.2",
     "apollo-server-express": "^3.10.0",
     "bcrypt": "^5.0.1",
     "compression": "^1.7.4",
@@ -29,6 +32,7 @@
     "express": "^4.18.1",
     "graphql": "^16.5.0",
     "graphql-import-node": "^0.0.5",
+    "graphql-merge-resolvers": "^1.1.16",
     "graphql-playground-middleware-express": "^1.7.23",
     "graphql-tools": "^8.3.0",
     "jsonwebtoken": "^8.5.1",

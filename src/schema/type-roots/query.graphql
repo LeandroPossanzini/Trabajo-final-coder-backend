@@ -1,0 +1,11 @@
+
+"Definiciones de los tipos de raiz"
+type Query{
+    users: ResultUsers
+    "Para iniciar sesion de usuario"
+    login(email: String!, password: String!) : ResultLogin
+    "Autenticar mendiante token"
+    me: ResultUser
+    "Mostrar lista de productos"
+    products: Boolean
+}
